@@ -26,7 +26,7 @@ public class Human extends JPanel {
     //GUI ATTRIBUTES
     private static final Color c = new Color(115, 162, 78);
     private static final int start = 250;
-    private static final int speed = 20;
+    public static final int speed = 20;
     public ArrayList<Rectangle> body;
     private String direction;
     private Stack<Goblin> targets = new Stack<>();
@@ -57,22 +57,25 @@ public class Human extends JPanel {
     //FUNCTIONAL FUNCTIONS
     public void checkColission(Goblin t ,  int index) {
         Rectangle r3 = this.body.get(0);
+        Rectangle temp_rect;
 
         //INTERSECTION!!
         if ( t != null) {
-            if (r3.intersects(new Rectangle( t.getPosx(), t.getPosy()))) {
+            temp_rect =  new Rectangle( t.getPosx(), t.getPosy());
+            if (r3.intersects(temp_rect)) {
                 System.out.println("here!!!!!");
                 this.targets.pop();
 
                 //GAME OVER!!!!!
-//                System.out.println("You lose!");
-//                this.window.setVisible(false);
-//
-//                JFrame parent = new JFrame("Game over!");
-//                JOptionPane.showMessageDialog(parent, "Your score: " + this.body.size());
-//
-//                this.window.dispatchEvent(new WindowEvent(this.window, WindowEvent.WINDOW_CLOSING));
-//                System.exit(0);
+                // System.out.println("You lose!");
+                // this.window.setVisible(false);
+
+                // JFrame parent = new JFrame("Game over!");
+                // JOptionPane.showMessageDialog(parent, "Your score: " + this.body.size());
+
+                // this.window.dispatchEvent(new WindowEvent(this.window, WindowEvent.WINDOW_CLOSING));
+                // System.exit(0);
+
             }
         }
     }
@@ -97,10 +100,7 @@ public class Human extends JPanel {
             Rectangle newRec = new Rectangle(previous.getPosx(), previous.getPosy());
             newLst.add(newRec);
         }
-
-
         this.body = newLst;
-
 
         for (int i = 1; i < this.targets.size(); i++) {
             checkColission(this.targets.get(i) , i);
