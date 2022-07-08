@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 
 import static main.Rectangle.rec_height;
@@ -25,10 +26,10 @@ public class Human extends JPanel {
     //GUI ATTRIBUTES
     private static final Color c = new Color(115, 162, 78);
     private static final int start = 250;
-    private static final int speed = 25;
-    private ArrayList<Rectangle> body;
+    private static final int speed = 20;
+    public ArrayList<Rectangle> body;
     private String direction;
-    private Goblin target;
+    private Stack<Goblin> targets = new Stack<>();
     private Main window;
 
 
@@ -54,15 +55,14 @@ public class Human extends JPanel {
 
 
     //FUNCTIONAL FUNCTIONS
-    public void checkColission() {
+    public void checkColission(Goblin t ,  int index) {
         Rectangle r3 = this.body.get(0);
 
         //INTERSECTION!!
-        if (this.target != null) {
-            if (r3.intersects(new Rectangle(this.target.getPosx(), this.target.getPosy()))) {
-                this.target = null;
+        if ( t != null) {
+            if (r3.intersects(new Rectangle( t.getPosx(), t.getPosy()))) {
                 System.out.println("here!!!!!");
-                this.target = null;
+                this.targets.pop();
 
                 //GAME OVER!!!!!
 //                System.out.println("You lose!");
@@ -100,7 +100,12 @@ public class Human extends JPanel {
 
 
         this.body = newLst;
-        checkColission();
+
+
+        for (int i = 1; i < this.targets.size(); i++) {
+            checkColission(this.targets.get(i) , i);
+        }
+
     }
 
     private void drawHuman(Graphics g) {
@@ -110,10 +115,15 @@ public class Human extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
 
-        if (this.target != null) {
-            g2d.setPaint(Color.red);
-            g2d.drawRect(this.target.getPosx(), this.target.getPosy(), rec_width, rec_height);
-            g2d.fillRect(this.target.getPosx(), this.target.getPosy(), rec_width, rec_height);
+        //Draw Goblin
+        if (this.targets.size() > 0) {
+            for(int x = 0; x < this.targets.size(); x++)
+            {
+                g2d.setPaint(Color.red);
+                g2d.drawRect(this.targets.get(x).getPosx(), this.targets.get(x).getPosy(), rec_width, rec_height);
+                g2d.fillRect(this.targets.get(x).getPosx(), this.targets.get(x).getPosy(), rec_width, rec_height);
+            }
+
         }
 
         g2d.setPaint(Color.blue);
@@ -154,8 +164,8 @@ public class Human extends JPanel {
         return this.compassion;
     }
 
-    public Goblin getTarget() {
-        return this.target;
+    public Stack<Goblin> getTargets() {
+        return this.targets;
     }
 
     public String getDirection() {
@@ -193,12 +203,14 @@ public class Human extends JPanel {
     }
 
     public void setTarget(Goblin goblin) {
-        this.target = goblin;
+        this.targets.push(goblin);
     }
 
     public void setDirection(String direction) {
         this.direction = direction;
     }
+
+
 
 
     //J FRAMES REPAINT PER FRAME
@@ -207,5 +219,13 @@ public class Human extends JPanel {
         super.paintComponent(g);
         setBackground(c);
         drawHuman(g);
+
+        // System.out.println("rendering human?");
+        if (this.targets.size() > 0) {
+            for (int x = 0; x < this.targets.size(); x++) {
+                this.targets.get(x).follow_human();
+            }
+        }
+
     }
 }

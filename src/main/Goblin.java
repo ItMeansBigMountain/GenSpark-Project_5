@@ -88,6 +88,16 @@ public class Goblin extends TimerTask {
         this.compassion = compassion;
     }
 
+    public void setPosx(int pos) {
+        this.posx = pos;
+    }
+
+    public void setPosy(int pos) {
+        this.posy = pos;
+    }
+
+
+
 
     //CUSTOM DEV FUNCTIONS
     public Class whoIsTheParent() {
@@ -100,9 +110,10 @@ public class Goblin extends TimerTask {
     }
 
 
-
     //CONSTRUCTORS
     public Goblin(Human human, Random random) {
+        this.posx = 25 * new Random().nextInt(20);
+        this.posy = 25 * new Random().nextInt(20);
         this.human = human;
         this.health = 10;
         this.combatLVL = (this.defence + this.attack + this.strength + this.intelligence + this.compassion) / 5;
@@ -114,27 +125,35 @@ public class Goblin extends TimerTask {
         this.inventory = new ArrayList<>();
     }
 
-    public Goblin(Random random) {
-        this.posx = 25 * new Random().nextInt(20);
-        this.posy = 25 * new Random().nextInt(20);
-        this.health = 10;
-        this.combatLVL = (this.defence + this.attack + this.strength + this.intelligence + this.compassion) / 5;
-        this.attack = random.ints(5, 7 + 50).findFirst().getAsInt();
-        this.strength = random.ints(5, 7 + 50).findFirst().getAsInt();
-        this.defence = random.ints(2, 3 + 50).findFirst().getAsInt();
-        this.intelligence = random.ints(2, 3 + 50).findFirst().getAsInt();
-        this.compassion = random.ints(2, 3 + 50).findFirst().getAsInt();
-        this.inventory = new ArrayList<>();
 
+
+
+
+    public void follow_human() {
+        System.out.println(this.human.body.get(0).getPosx() + " " + this.human.body.get(0).getPosy() );
+
+        int distance_X = this.human.body.get(0).getPosx() - this.getPosx();
+        int distance_Y = this.human.body.get(0).getPosy() - this.getPosy();
+        this.setPosx( this.getPosx() + distance_X / 3);
+        this.setPosy( this.getPosy() + distance_Y / 3);
+
+
+        System.out.println(this.getPosx() + " " + this.getPosy());
     }
 
 
 
-    //JFRAME on_RUN METHOD
+
+
+
+
+
+
+    //TIMER SCHEDULER on_RUN METHOD
     @Override
     public void run() {
-        if (this.human.getTarget() == null) {
-            this.human.setTarget(new Goblin(new Random()));
-        }
+            this.human.setTarget( new Goblin(this.human , new Random() )   );
     }
+
+
 }
