@@ -118,7 +118,7 @@ public class Goblin extends TimerTask {
         this.posx = 25 * new Random().nextInt(20);
         this.posy = 25 * new Random().nextInt(20);
         this.human = human;
-        this.speed = random.ints(1 / 50, this.human.speed -1 ).findFirst().getAsInt();
+        this.speed = random.ints(1, this.human.speed -1 ).findFirst().getAsInt();
         this.health = 10;
         this.combatLVL = (this.defence + this.attack + this.strength + this.intelligence + this.compassion) / 5;
         this.attack = random.ints(5, 7 + 50).findFirst().getAsInt();
@@ -134,12 +134,12 @@ public class Goblin extends TimerTask {
 
 
     public void follow_human() {
-        System.out.println(this.human.body.get(0).getPosx() + " " + this.human.body.get(0).getPosy() );
+//        System.out.println(this.human.body.get(0).getPosx() + " " + this.human.body.get(0).getPosy() );
         int distance_X = this.human.body.get(0).getPosx() - this.getPosx();
         int distance_Y = this.human.body.get(0).getPosy() - this.getPosy();
         this.setPosx( this.getPosx() + distance_X / speed);
         this.setPosy( this.getPosy() + distance_Y / speed);
-        System.out.println(this.getPosx() + " " + this.getPosy());
+//        System.out.println(this.getPosx() + " " + this.getPosy());
     }
 
 
